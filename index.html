@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>无缝滚动</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            margin: 100px auto;
+            width: 1050px;
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel {
+            cursor: pointer;
+            display: flex;
+            position: absolute;
+            /* transition: all 0.02s; */
+        }
+
+        .carousel-item {
+            width: 200px;
+            height: 200px;
+            flex-shrink: 0;
+            margin-right: 10px;
+            /*不设置会导致图片设定的宽高不起作用*/
+        }
+
+        .btn {
+            width: 35px;
+            height: 35px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .pre {
+            left: 0;
+        }
+
+        .next {
+            right: 0;
+        }
+
+        .dots {
+            padding: 0;
+            margin: 3px;
+            font-size: 0;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%);
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            margin: 3px;
+        }
+
+        .dot-active {
+            background-color: #fff;
+        }
+
+        .dot:hover {
+            cursor: pointer;
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="container">
+        <div class="carousel">
+            <img class="carousel-item" src="./imgs/1.jpeg" />
+            <img class="carousel-item" src="./imgs/2.jpeg" />
+            <img class="carousel-item" src="./imgs/3.jpeg" />
+            <img class="carousel-item" src="./imgs/4.jpeg" />
+            <img class="carousel-item" src="./imgs/5.jpeg" />
+            <img class="carousel-item" src="./imgs/6.jpeg" />
+        </div>
+        <img class="btn pre" src="./imgs/arrow-left.png"/>
+        <img class="btn next" src="./imgs/arrow-right.png"/>
+        <ul class="dots">
+            <li class="dot"></li>
+            <li class="dot"></li>
+            <li class="dot"></li>
+            <li class="dot"></li>
+            <li class="dot"></li>
+            <li class="dot"></li>
+        </ul>
+    </section>
+</body>
+<script>
+    var container = document.querySelector(".container");
+    var carousel = document.querySelector('.carousel');
+    carousel.innerHTML += carousel.innerHTML;
+    var itemWidth = document.querySelector('.carousel-item').clientWidth;
+    var offsetLeft = 0;
+    var timer = null;
+
+    function autoPlay () {
+        // 设表先关
+        clearInterval(timer);
+        timer = window.setInterval(function () {
+            offsetLeft -= itemWidth/40;
+            if (offsetLeft < -(itemWidth*6+(10*5))) {
+                offsetLeft = 0;
+            }
+            carousel.style.transform = 'translateX(' + (offsetLeft) + 'px)';
+        }, 20)
+    }
+
+    function stopPlay () {
+        clearInterval(timer);
+    }
+
+    container.addEventListener('mouseover', function () {
+        stopPlay();
+    }, false);
+    container.addEventListener('mouseout', function () {
+        autoPlay();
+    }, false);
+
+    autoPlay();
+</script>
+
+</html>
